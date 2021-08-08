@@ -15,196 +15,160 @@
         <h2>Zakaz ZTM</h2>
     </nav>
     <?php
+    echo $deleteDate;
         echo "<p>Witaj ".$_SESSION['login'].'!</p>';
         echo "<a href='redirects/logout.php'>Wyloguj się!</a><br><br>";
-        if ($currentRole->num_rows > 0) 
-        {
-            while($row = $currentRole->fetch_assoc()) 
-            {
+        if ($currentRole->num_rows > 0) {
+            while($row = $currentRole->fetch_assoc()) {
                 $myRole = $row["role"];
             }
         }
-        if ($currentTkid->num_rows > 0)
-        {
-            while($row = $currentTkid->fetch_assoc()) 
-            {
+        if ($currentTkid->num_rows > 0) {
+            while($row = $currentTkid->fetch_assoc()) {
                 $myTkid = $row["tkid"];
             }
         }
-        if($myRole == "admin")
-        {
+        if($myRole == "admin") {
             error_reporting(0);
-            echo '<a href="crud/create-prohibition">NOWY ZAKAZ</a>';
-        }
     ?>
-    <br><br>
-    <!-- wybranie tabeli -->
-    <fieldset>
-        <legend>Wyświetl grafik</legend>
-        <form action="grafik" method="post">
-            Wybierz zakres jednego tygodnia od poniedziałku do niedzieli <br>
-            <input type="date" value=<?php
-                $dates = split ("\_", $newestTable); 
-                $newestDateStart = substr($dates[0],0,4).'-'.substr($dates[0],4,2).'-'.substr($dates[0],6,2);
-                if(isset($dateStartUpdate)) echo $dateStartUpdate;
-                else if(!isset($dateStart) || $dateStart=='') echo $newestDateStart;
-                else echo $dateStart;
-            ?> name="dateStart">
-            <input type="date" value=<?php
-                $dates = split ("\_", $newestTable); 
-                $newestDateEnd = substr($dates[1],0,4).'-'.substr($dates[1],4,2).'-'.substr($dates[1],6,2);
-                if(isset($dateEndUpdate)) echo $dateEndUpdate;
-                else if(!isset($dateEnd) || $dateEnd=='') echo $newestDateEnd;
-                else echo $dateEnd;
-            ?> name="dateEnd">
-            <input type="submit" value="WYŚWIETL">
-        </form>
-        <?php
-            if(isset($_SESSION['e_read']))
-            {
-                echo '<div class="error">'.$_SESSION['e_read'].'</div>';
-                unset($_SESSION['e_read']);
-            }
-        ?>
-        <!-- usuwanie tabeli -->
-        <?php if($myRole == "admin") { ?>
-        <form action="grafik" method="post" style="display: flex; justify-content: end;">
-            <input type="hidden" value=<?php
-            $dates = split ("\_", $newestTable); 
-            $newestDateStart = substr($dates[0],0,4).'-'.substr($dates[0],4,2).'-'.substr($dates[0],6,2);
-            if(!isset($dateStart) || $dateStart=='') echo $newestDateStart;
-            else echo $dateStart;
-            ?> name="dateStartDelete">
-            <input type="hidden" value=<?php
-            $dates = split ("\_", $newestTable); 
-            $newestDateEnd = substr($dates[1],0,4).'-'.substr($dates[1],4,2).'-'.substr($dates[1],6,2);
-            if(!isset($dateEnd) || $dateEnd=='') echo $newestDateEnd;
-            else echo $dateEnd;
-            ?> name="dateEndDelete">
+    <div style="display: flex;">
+        <a href="crud/create-prohibition">NOWY ZAKAZ</a>
+<!-- usuwanie tabeli -->
+        <form action="zakaz" method="post" style="margin-left: 50px;">
+            <input type="hidden" value=<?php echo $date; ?> name="deleteDate">
             <input type="submit" value="USUŃ TABELĘ">
         </form>
         <?php
-            if(isset($_SESSION['e_delete']))
-            {
+            if(isset($_SESSION['e_delete'])) {
                 echo '<div class="error">'.$_SESSION['e_delete'].'</div>';
                 unset($_SESSION['e_delete']);
             }
-        }
         ?>
-        <!-- aktualizacja tabeli -->
-        <?php if($myRole == "admin") { ?>
-        <fieldset>
-            <legend>Aktualizuj grafik</legend>
-            <form action="grafik" method="post">
-                <input type="hidden" value=<?php
-                    $dates = split ("\_", $newestTable); 
-                    $newestDateStart = substr($dates[0],0,4).'-'.substr($dates[0],4,2).'-'.substr($dates[0],6,2);
-                    if(!isset($dateStart) || $dateStart=='') echo $newestDateStart;
-                    else echo $dateStart;
-                ?> name="dateStartUpdate">
-                <input type="hidden" value=<?php
-                    $dates = split ("\_", $newestTable); 
-                    $newestDateEnd = substr($dates[1],0,4).'-'.substr($dates[1],4,2).'-'.substr($dates[1],6,2);
-                    if(!isset($dateEnd) || $dateEnd=='') echo $newestDateEnd;
-                    else echo $dateEnd;
-                ?> name="dateEndUpdate">
+    </div>
 
-                <select name="day"><?php for($x = 0; $x < sizeof($days); $x++) echo '<option value="'.$daysEn[$x].'">'.$days[$x].'</option>'; ?></select>
-                <br><br>
-                <input type="radio" id="1" name="hour" value="1" required>
-                <label for="1">06:00 - 14:00</label>
-                <input type="radio" id="2" name="hour" value="2" required>
-                <label for="2">14:00 - 22:00</label>
-                <br><br>
-                <select name="carrier"><?php for($x = 0; $x < sizeof($carriers); $x++) echo '<option>'.$carriers[$x].'</option>'; ?></select>
-                <br><br>
-                <textarea name="team" cols="8" rows="2" placeholder="np. 123 - 456, 321 - 654"><?php if(isset($_SESSION['fr_team'])) { echo $_SESSION['fr_team']; unset($_SESSION['fr_team']);} ?></textarea>
-                <br><br>
-                <input type="submit" value="AKTUALIZUJ">
-            </form>
-            <?php
-                if(isset($_SESSION['e_update']))
-                {
-                    echo '<div class="error">'.$_SESSION['e_update'].'</div>';
-                    unset($_SESSION['e_update']);
-                }
-            ?>
-
-            <?php } ?>
-            <!-- wyświetlanie tabeli -->
-            <table border = "2px, solid, black">
-
+    <br>
+<!-- aktualizacja tabeli -->
+    <fieldset>
+        <legend>Edycja</legend>
+        <form id="editTable" action="zakaz" method="post">
+            <table>
                 <tr>
-                    <th rowspan = "2">Przewoźnik</th>
-                    <?php for($x = 0; $x < sizeof($days); $x++) {?>
-                        <th colspan = "2"><?php echo $days[$x]; ?></th>
-                    <?php } ?>
+                    <td>
+                        <select name="date">
+                            <?php
+                                $i=0;
+                                while($row = mysqli_fetch_array($resultSelect)) {
+                            ?>
+                            <option><?php echo $row["date"]; ?></option>
+                            <?php
+                                    $i++;
+                                }
+                            ?>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="shift">
+                                <option value="shift1">06:00 - 14:00</option>
+                                <option value="shift2">14:00 - 22:00</option>
+                                <option value="shift3">22:00 - 06:00</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="carrier">
+                            <?php for($x = 0; $x < sizeof($carriers); $x++) echo '<option>'.$carriers[$x].'</option>'; ?>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="submit" value="AKTUALIZUJ">
+                    </td>
                 </tr>
+            </table>
+        </form>
+    </fieldset>
+    <?php } ?>
+<!-- wyświetlanie tabeli -->
+    <table border = "2px, solid, black">
+        <tr>
+            <th>
+                <form id="displayTable" action="zakaz" method="post">
+                    <select name="month" id="month" onchange="submitDisplayTable()">
+                        <?php
+                            $tmpYearMonth = substr_replace($dateUpdate, "", 7);
+                            $tmpMonth = substr($tmpYearMonth, 5);
+                            for($x = 1; $x <= 12; $x++) {
+                                if(strlen($x)==1) $x = '0'.$x;
 
-                <tr class="hours">
-                    <?php for($x = 0; $x < 7; $x++) {?>
-                        <th>06:00 - 14:00</th>
-                        <th>14:00 - 22:00</th>
-                    <?php } ?>
-                </tr>
-
-                <?php
-                    $i=0;
-                    while($row = mysqli_fetch_array($result))
-                    {
-                ?>
-                <tr class="teams">
-                    <td><?php echo $row["carrier"]; ?></td>
-                    <?php
-                        if($myRole == "admin") {
-                            for($x = 0; $x < sizeof($shifts); $x++) {
-                                echo '<td>'.$row[$shifts[$x]].'</td>';
-                            }
-                        } else {
-                            for($x = 0; $x < sizeof($shifts); $x++) {
-                                if(strpos($row[$shifts[$x]], $myTkid) !== false)
-                                {
-                                    $text = "";
-                                    $re = '/([0-9]+ ?- ?[0-9]+)/m';
-                                    $str = $row[$shifts[$x]];
-                                    preg_match_all($re, $str, $matches, PREG_SET_ORDER, 0);
-                                    if(count($matches) > 0) {
-                                        foreach( $matches as $match ) {
-                                            $text .= substr_count($match[1], $myTkid) >= 1 ? $match[1] : "";
-                                        }
-                                    }
-                                    echo '<td>'.$text.'</td>';
-
-
-                                    // if(substr_count($row[$shifts[$x]], $myTkid." -") == 1) {
-                                    //     $record = preg_filter('/'.$myTkid.' - [0-9]{3}/', '($0)', $row[$shifts[$x]]);
-                                    //     $record = preg_replace('/.*[(]/', '', $record);
-                                    //     $record = preg_replace('/[)].*/', '', $record);
-                                    //     echo '<td>'.$record.'</td>';
-                                    // }
-
-                                    // if(substr_count($row[$shifts[$x]], "- ".$myTkid) == 1) {
-                                    //     $record = preg_filter('/[0-9]{3} - '.$myTkid.'/', '($0)', $row[$shifts[$x]]);
-                                    //     $record = preg_replace('/.*[(]/', '', $record);
-                                    //     $record = preg_replace('/[)].*/', '', $record);
-                                    //     echo '<td>'.$record.'</td>';
-                                    // }
-                                } else if(stripos($row[$shifts[$x]], 'ZAKAZ') !== false)  {
-                                    echo '<td>'.$row[$shifts[$x]].'</td>';
-                                } else {
-                                    echo '<td></td>';
+                                if($tmpMonth == $x) {
+                                    echo '<option selected>'.$x.'</option>';
+                                }
+                                else if($_POST['month'] == $x) {
+                                    echo '<option selected>'.$x.'</option>';
+                                } 
+                                else { 
+                                    echo '<option>'.$x.'</option>';
                                 }
                             }
+                        ?>
+                    </select>
+                    <select name="year" id="year" onchange="submitDisplayTable()">
+                    <?php
+                        $nextYear = date("Y") + 1;
+                        $currentYear = date("Y");
+                        $previousYear = date("Y") - 1;
+                        $updateYear = substr_replace($dateUpdate, "", 4);
+
+                        if($tmpYear == $nextYear) {
+                            echo '<option selected>'.$nextYear.'</option>';
+                        } else if($_POST['year'] == $nextYear) {
+                            echo '<option selected>'.$nextYear.'</option>';
+                        } else {
+                            echo '<option>'.$nextYear.'</option>';
+                        }
+
+                        if($tmpYear == $currentYear) {
+                            echo '<option selected>'.$currentYear.'</option>';
+                        } else if($_POST['year'] == $currentYear) { 
+                            echo '<option selected>'.$currentYear.'</option>';
+                        } else {
+                            echo '<option>'.$currentYear.'</option>';
+                        }
+
+                        if($tmpYear == $previousYear) {
+                            echo '<option selected>'.$previousYear.'</option>';
+                        } else if($_POST['year'] == $previousYear) {
+                            echo '<option selected>'.$previousYear.'</option>';
+                        } else {
+                            echo '<option>'.$previousYear.'</option>';
                         }
                     ?>
-                </tr>
-                
-                <?php
-                        $i++;
-                    }
-                    $connection->close();
-                ?>
-            </table>
-        </fieldset>
-    </fieldset>
+                    </select>
+                </form>
+            </th>
+            <?php for($x = 0; $x < sizeof($hours); $x++) {?>
+                <th><?php echo $hours[$x];?></th>
+            <?php } ?>
+        </tr>
+        <?php
+            $i=0;
+            while($row = mysqli_fetch_array($result)) {
+        ?>
+        <tr class="teams">
+            <td><?php echo $row["date"]; ?></td>
+            <td><?php echo $row["shift1"]; ?></td>
+            <td><?php echo $row["shift2"]; ?></td>
+            <td><?php echo $row["shift3"]; ?></td>
+        </tr>
+        <?php
+                $i++;
+            }
+            $connection->close();
+        ?>
+    </table>
+    <?php
+        if(isset($_SESSION['e_read'])) {
+            echo '<div class="error">'.$_SESSION['e_read'].'</div>';
+            unset($_SESSION['e_read']);
+        }
+    ?>
+    <script src="/administracja/js/submit.js"></script>
 </body>
