@@ -73,6 +73,7 @@
             <section id="notifications">
                 <div>
                     <h3>UWAGA!</h3>
+                    <div class="li"><i class="icon-bus"></i><p>(2021-08-13) W dniach 16-22 sierpnia zmiana godzin pracy naszego biura na 11:00 - 15:00 !</p></div>
                     <div class="li">
                         <i class="icon-bus"></i>
                         <p>
@@ -81,15 +82,14 @@
                             na liniach tego Przewoźnika. Kontrole będą przeprowadzane we wszystkich strefach za wyjątkiem strefy "A".
                         </p>
                     </div>
-
                     <div class="li"><i class="icon-bus"></i><p>Od dnia 01-07-2020 r. zapłacisz kartą lub telefonem u większości z naszych kontrolerów!</p></div>
                     <!-- <div class="li"><i class="icon-bus"></i><p>Od dnia 15-06-2020 r. zapłacisz kartą lub telefonem także u naszych niektórych kontrolerów!</p></div> -->
-                    <div class="li"><i class="icon-bus"></i><p>Od dnia 08-06-2020 r. zapłacisz w naszym BOK kartą lub telefonem!</p></div>
                 </div>
                 <div class="dropdown">
                     <button onclick="archive()" class="dropbtn">ARCHIWALNE</button>
                     <div id="archive" class="dropdown-content">
                         <div>ARCHIWALNE</div>
+                        <div class="li"><i class="icon-bus"></i><p>Od dnia 08-06-2020 r. zapłacisz w naszym BOK kartą lub telefonem!</p></div>
                         <div class="li"><i class="icon-bus"></i><p>Od dnia 01-06-2020 obsługa w naszym BOK możliwa już w każdy poniedziałek, wtorek i czwartek w g. 12-16.</p></div>
                         <div class="li"><i class="icon-bus"></i><p>Od dnia 12-05-2020 nasze Biuro Obsługi już jest otwarte! Na razie zapraszamy w każdy wtorek i czwartek w g. 12-16.</p></div>
                         <div class="li"><i class="icon-bus"></i><p>Od dnia 16-03-2020 do odwołania obsługa Interesantów tylko telefonicznie lub mailowo!</p></div>
@@ -121,6 +121,6 @@
         </article>
     </main>
     <footer><?php include "components/stopka.php"; ?></footer>
-    <!-- <script>window.alert("Drodzy Państwo, uprzejmie informujemy, iż dnia 04.06.2021 nasze biuro będzie nieczynne!");</script> -->
+    <script>window.alert("Drodzy Państwo, uprzejmie informujemy, iż w dniach 16-22 sierpnia zmieniają się godziny pracy naszego biura na 11:00 - 15:00 !");</script>
 </body>
 </html>
