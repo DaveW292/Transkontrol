@@ -12,6 +12,7 @@
         <a href="aktualnosci"><h2>Aktualności</h2></a>
         <a href="grafik"><h2>Grafik</h2></a>
         <h2>Dyspozycyjność</h2>
+        <a href="zakaz"><h2>Zakaz ZTM</h2></a>
     </nav>
     <?php
         echo "<p>Witaj ".$_SESSION['login'].'!</p>';
